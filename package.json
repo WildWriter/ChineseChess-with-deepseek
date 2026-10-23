@@ -1,19 +1,14 @@
 {
-  "name": "chinesechess-with-deepseek",
-  "version": "14.3.3",
+  "name": "qili-study",
+  "version": "0.1.0",
+  "private": true,
   "type": "module",
-  "description": "ChineseChess with deepseek - local Chinese chess board, endgame editor, and Pikafish engine interface.",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/WildWriter/ChineseChess-with-deepseek.git"
-  },
-  "homepage": "https://github.com/WildWriter/ChineseChess-with-deepseek",
-  "bugs": {
-    "url": "https://github.com/WildWriter/ChineseChess-with-deepseek/issues"
-  },
+  "description": "棋理学伴：象棋战术练习、证据讲解与错题重练",
   "scripts": {
-    "start": "node server.js",
-    "test": "node --test tests/*.test.js"
+    "start": "node --env-file-if-exists=.env server.js",
+    "test": "node --test tests/*.test.js",
+    "verify": "node scripts/verify-curriculum.js"
   },
+  "engines": { "node": ">=22.9" },
   "license": "MIT"
 }

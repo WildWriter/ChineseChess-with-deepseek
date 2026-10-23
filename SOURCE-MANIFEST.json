@@ -1,0 +1,355 @@
+{
+  "application": "qili-study",
+  "version": "0.1.0",
+  "createdAt": "2026-10-22T02:08:34.9997203+00:00",
+  "archiveTimeZone": "Asia/Shanghai",
+  "excluded": [
+    ".env",
+    "personal learning records",
+    "evidence",
+    "logs",
+    "generated engine/pikafish.nnue"
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 8932,
+      "sha256": "ee6726d6a143f7cb3357f86d17ecf41acc9364812fdd9412121a67d72c41e91e"
+    },
+    {
+      "path": "SUBMISSION.md",
+      "bytes": 3649,
+      "sha256": "d1dfd53ff203b7973d64c22bec2bb0a648f20cabcc888a43c4d546586fb00215"
+    },
+    {
+      "path": "TESTING.md",
+      "bytes": 6399,
+      "sha256": "c20e5b7fa4c68e6ca4eeb8053f1c66592f92f1e1b8ce9407ba056aaceaaed168"
+    },
+    {
+      "path": "package.json",
+      "bytes": 397,
+      "sha256": "22d6005ba1e03d083ebd7214444e044fa2577c6e2b95569fc347fe0ca91cd24e"
+    },
+    {
+      "path": "server.js",
+      "bytes": 11297,
+      "sha256": "e8ac7438f9af2d1cdaa7efad30e429ae45613add9a638805eeabe2d75a8b1a9e"
+    },
+    {
+      "path": "start.ps1",
+      "bytes": 890,
+      "sha256": "5c4f00048ee1a1e429e7cd3f8dc91be16a0130f6a7c188d75f02a11fee130326"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1234,
+      "sha256": "73c53b4e5cdbbebb168955cc75e74e93021da435868c27b9ddbb47410f438280"
+    },
+    {
+      "path": "THIRD_PARTY.md",
+      "bytes": 1942,
+      "sha256": "1ce9a47bd6f49e7d4aa62a45d5748e4b2a20805ade44795d9ca8ebb7c5db70c9"
+    },
+    {
+      "path": ".env.example",
+      "bytes": 383,
+      "sha256": "e9bd4a59c308e383b75d77ec675633e4d9946341d9bc68e4fb30edb4b1793f5a"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 98,
+      "sha256": "ee12d3bcc846fc27b84bf9ecbb18716da0308b135643dc9a456504ae14c70f8b"
+    },
+    {
+      "path": "启动棋理学伴.cmd",
+      "bytes": 870,
+      "sha256": "4a7413275ac1cdfd82055ccdc2e4c640b1df9a82dc5b4be69b826dd2252fbed5"
+    },
+    {
+      "path": "public/app.js",
+      "bytes": 35458,
+      "sha256": "5f79bda29cc8fdae1f1677fa3ef40aba3ef3227413c1a38389b9873beb0f060a"
+    },
+    {
+      "path": "public/curriculum.js",
+      "bytes": 637,
+      "sha256": "373cb332342373cda82fc2dc5b9bf02ac469755afdea80a1756d6ffbc52a6799"
+    },
+    {
+      "path": "public/import-lab.js",
+      "bytes": 15046,
+      "sha256": "3aa5955866600e2f52b8a48fd5b4fff4d9034e478d029c14a04557c1e64f60c9"
+    },
+    {
+      "path": "public/index.html",
+      "bytes": 17019,
+      "sha256": "17877e54303572b8045f191fe4a27979187ea7eb2041f6057b81179c6e0d7b25"
+    },
+    {
+      "path": "public/learning-store.js",
+      "bytes": 4305,
+      "sha256": "dd08cae6c4bc719bfc39fb7bb8a0c3f19b8c5cb69dea7144a52824ca802aa6d1"
+    },
+    {
+      "path": "public/logo.svg",
+      "bytes": 387,
+      "sha256": "f2f782e0b97673f98157b240b78cf47c7b02925094f786fa1a7b95b56250e7a4"
+    },
+    {
+      "path": "public/model-session.js",
+      "bytes": 1559,
+      "sha256": "5d3af2521f2556327a2ef09f872d8af7202b803fb879b41126f1fb34efb1186f"
+    },
+    {
+      "path": "public/style.css",
+      "bytes": 21179,
+      "sha256": "a33f7b502d5f66b13e8130f7cc58c94ca62f340561f0304cdabc7a98baee5c9a"
+    },
+    {
+      "path": "public/vendor/LICENSE-ChineseChess.txt",
+      "bytes": 1056,
+      "sha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685"
+    },
+    {
+      "path": "public/vendor/xiangqi-notation.js",
+      "bytes": 2816,
+      "sha256": "c2c1a43ecce40b21129f9c85a3a7605b90ae1927878c22245c6e2d7c0e618b8b"
+    },
+    {
+      "path": "public/vendor/xiangqi.js",
+      "bytes": 14144,
+      "sha256": "cd15a707892abd66a9521cca4b8a1808eca81be897bdde8a73dcc67e111337d0"
+    },
+    {
+      "path": "src/coach.js",
+      "bytes": 5245,
+      "sha256": "fd37dbd5f3adf18e8f3f4521bce4a5db5a539b0a251ed6a2fa151ac210cd0588"
+    },
+    {
+      "path": "src/endgame-search.js",
+      "bytes": 2622,
+      "sha256": "294ac712bc644a0c76d346020c1c63a712f3c72a16860bf4ddaa4046187350aa"
+    },
+    {
+      "path": "src/endgame-training.js",
+      "bytes": 5863,
+      "sha256": "1a6d711d14891307957dcbd0121d2a600da07f3dd76f7946ab2cf04e27fba93b"
+    },
+    {
+      "path": "src/engine.js",
+      "bytes": 4408,
+      "sha256": "b88dc55e14cccd58e72d3f9c6e04c1ab612d17db9845cc47e49e9be21a4c6592"
+    },
+    {
+      "path": "src/import-analysis.js",
+      "bytes": 2517,
+      "sha256": "44e824f557d7186d213fbe29cb47de5474428213b159d4878960a41e723799a9"
+    },
+    {
+      "path": "src/imported-position.js",
+      "bytes": 4932,
+      "sha256": "fb8c96cd33ff02278273cfde4c2010e69fde6dde452c730ecf6c924a2d7c55cb"
+    },
+    {
+      "path": "src/knowledge.js",
+      "bytes": 1640,
+      "sha256": "97c0e7373029e84e3eb6ff1eea76ac0bca4485627bfa2d07d86aea663dca5b47"
+    },
+    {
+      "path": "src/model-client.js",
+      "bytes": 5231,
+      "sha256": "73fe2f25cb6d927a44a8766436cab8e85f3c0376a959009ccc1730317120b4ef"
+    },
+    {
+      "path": "src/position-coach.js",
+      "bytes": 2276,
+      "sha256": "b61e191405574a903bc276832e0b5f93e4f6bd936816de1040eeb8f50ac6f368"
+    },
+    {
+      "path": "src/position-search.js",
+      "bytes": 2362,
+      "sha256": "6109356b917d961bedd315a292ffa2e7081c46246cd5294af860f01a78a979b3"
+    },
+    {
+      "path": "src/position-vision.js",
+      "bytes": 4111,
+      "sha256": "68e85e51887957de8f5f7e8ddf55a73dadea14d53e173769ed2f134a0759c797"
+    },
+    {
+      "path": "src/position-worker.js",
+      "bytes": 202,
+      "sha256": "af971c4997a7cec1736f1f1a485073bdd20854971213458e7adc2eb4a986179c"
+    },
+    {
+      "path": "src/puzzles.js",
+      "bytes": 16070,
+      "sha256": "db0148250bbd4b1bb5fbe3c0a9742fe04133d2c3e977434862541ea98d7f0aca"
+    },
+    {
+      "path": "src/training.js",
+      "bytes": 5649,
+      "sha256": "bbd274a96b8cf8f3496c5b5476368a98b6635b3393100c5aad42cc95d7d4fd4c"
+    },
+    {
+      "path": "src/xiangqi.js",
+      "bytes": 126,
+      "sha256": "64ecd252af178d789a3ad640479cfacb724812876570a12d218cd5190e21100b"
+    },
+    {
+      "path": "tests/coach.test.js",
+      "bytes": 4120,
+      "sha256": "c8f19da9f516e319b570123b30dbcef3e7ac5df020525f55c90b74a8dfa33d12"
+    },
+    {
+      "path": "tests/endgames.test.js",
+      "bytes": 6434,
+      "sha256": "334c24e8c7ca64297fa5e3726b6867484f5bc25e699b46294018e1babae61ad0"
+    },
+    {
+      "path": "tests/import-position.test.js",
+      "bytes": 13796,
+      "sha256": "43d8fdc8047d166c23b642a32ab7ee933efe391bc7f391d4aab10f2852165839"
+    },
+    {
+      "path": "tests/learning-store.test.js",
+      "bytes": 5961,
+      "sha256": "ca699e2e43ae0d1a5d67da59fa407c83ca1aae4f63381c662df2becde79bdf6d"
+    },
+    {
+      "path": "tests/model-client.test.js",
+      "bytes": 6762,
+      "sha256": "050ce53c6a55bd15ba885471f55ba04efe59c352f73c9a3ff1fff93fb4ef8e72"
+    },
+    {
+      "path": "tests/server.test.js",
+      "bytes": 10567,
+      "sha256": "5efbfe28424213e3c547ed362b51e54466326fe0341462d6b95b304af0362baf"
+    },
+    {
+      "path": "tests/training.test.js",
+      "bytes": 4493,
+      "sha256": "0c39ecc55997f107680d40e31c1ca01cb3ffe92c96ed07c3deae2c12ec65cbd3"
+    },
+    {
+      "path": "tests/upstream-xiangqi.test.js",
+      "bytes": 5105,
+      "sha256": "5218ec1882d3bffe3ecca4f4ae55ec231b163ba22b088f10d2d6346c8cd7486e"
+    },
+    {
+      "path": "scripts/package-source.ps1",
+      "bytes": 3318,
+      "sha256": "054d0bcc78d1d17e19e4bc682a998ed9657d7993ddd664867541daabe0d56ff9"
+    },
+    {
+      "path": "scripts/prepare-engine.js",
+      "bytes": 2599,
+      "sha256": "f01a782f09d08ba9b3aa6672714a64f3c91f4408903c830d21a3910b47a2c458"
+    },
+    {
+      "path": "scripts/verify-curriculum.js",
+      "bytes": 1035,
+      "sha256": "22c6c8afc418bc6c07836966cab98605bbc52ac39bb55f95c0a46c84bfc343c4"
+    },
+    {
+      "path": "scripts/verify-package.js",
+      "bytes": 3956,
+      "sha256": "c3485ff712dd9e2013f1680b8251be004d1283822350f97268f31e7351246bd7"
+    },
+    {
+      "path": "docs/ACCEPTANCE.md",
+      "bytes": 4813,
+      "sha256": "275f228e6f7cb518bb8f798c265593590512a94d0af50af1df90eb23cd82c01d"
+    },
+    {
+      "path": "docs/API-PAGE-SETTINGS.md",
+      "bytes": 6949,
+      "sha256": "6aca0ff8fd649d29afc55c786b09b62cd903623ba3acfd6542dd8619eb074e3c"
+    },
+    {
+      "path": "docs/API-VALIDATION.md",
+      "bytes": 3997,
+      "sha256": "b5e5c29714aa736be18b3a2a355c146598ec4e1634e98be25aafc07cfb77d0a5"
+    },
+    {
+      "path": "docs/ASSIGNMENT-AND-PLAN.md",
+      "bytes": 5508,
+      "sha256": "a419c9f3d942094dcb642f4eda952de80e3a98b95ccbd149ac3c0679ccf48146"
+    },
+    {
+      "path": "docs/DEPLOYMENT.md",
+      "bytes": 2449,
+      "sha256": "8fa2e2e85044e949316e24adb90bf8dff7b92a6ac0f00668d7be6dcfc5366861"
+    },
+    {
+      "path": "docs/ENDGAMES.md",
+      "bytes": 4121,
+      "sha256": "38177bc427b5202ecd46f1ec225af41cc2637629d3333c5b2e79db6a03d748c6"
+    },
+    {
+      "path": "docs/IMAGE-ENDGAMES-REAL-VALIDATION.md",
+      "bytes": 2395,
+      "sha256": "12d1dc8da5a1dbffc40fb36904adcca45aaef03b109df55b6f0cb599f218fb2b"
+    },
+    {
+      "path": "docs/IMAGE-ENDGAMES.md",
+      "bytes": 5652,
+      "sha256": "232e9edb63e0e8aad14a15e8562a79eb1bb36e8c455aac2d8808b1e6a18dea70"
+    },
+    {
+      "path": "docs/PPT-OUTLINE.md",
+      "bytes": 7518,
+      "sha256": "a7c9c8ecfc669dd32e07cda32ff7886ce2c0db716bf3b279e6e53cdb0be4974a"
+    },
+    {
+      "path": "docs/ROBUSTNESS.md",
+      "bytes": 4587,
+      "sha256": "6784d31f4d017b2e3a0a3a7b8c365208c1ade1f4d5dac8fd6cc12d41c4cecc9c"
+    },
+    {
+      "path": "engine/NNUE-License.md",
+      "bytes": 899,
+      "sha256": "7f3320aa61ceefecec1d5cd158d6d1d2a8adde93728e83a79448df50903c367b"
+    },
+    {
+      "path": "engine/Pikafish-GPL-3.0.txt",
+      "bytes": 35149,
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+    },
+    {
+      "path": "engine/Pikafish-Windows-x86-64-universal.exe",
+      "bytes": 6944256,
+      "sha256": "0d57d64c212e78f96cba9e5e4f140d8872f8faa42ea631a27ab6c5db08509da3"
+    },
+    {
+      "path": "engine/nnue-parts/pikafish.nnue.part001",
+      "bytes": 12676595,
+      "sha256": "3414e10e889896acd2956ad24b79a03eb933f305e890c43f865471b2b46e4add"
+    },
+    {
+      "path": "engine/nnue-parts/pikafish.nnue.part002",
+      "bytes": 12676595,
+      "sha256": "0423bd4c912e7187b44e938a8a2c9b9dfa4f96882dc0bf0b800eea894781a5a6"
+    },
+    {
+      "path": "engine/nnue-parts/pikafish.nnue.part003",
+      "bytes": 12676595,
+      "sha256": "6a4fa362701b2c2916f3d85e2caf83e1a8226a98c98b809e0ca5bb70a4e2d19f"
+    },
+    {
+      "path": "engine/nnue-parts/pikafish.nnue.part004",
+      "bytes": 12676593,
+      "sha256": "a8f27b3466106e05c01e86bd41d6a575cd51d1921dd2249a1176ab0d1fe24e5b"
+    },
+    {
+      "path": "engine/source/Pikafish-2026-09-06-source.zip",
+      "bytes": 559168,
+      "sha256": "0dd14eb1d1fc1144c7a98ec824461eaf2d451a16013046652c60a2e95972ce23"
+    },
+    {
+      "path": "engine/source/README-upstream.txt",
+      "bytes": 345,
+      "sha256": "edf28c5203106b5edf80f8bbb40281be9a40ee48b6c7b0e94aa704fe3f5ef4b8"
+    }
+  ]
+}

@@ -1,129 +1,51 @@
-import { normalizeApiKey } from "./deepseek-key.js";
+import { findPuzzle } from './puzzles.js';
+import { getLesson } from './training.js';
+import { validatePV } from './engine.js';
+import { resolveModelConfig, buildCompletionBody, requestCompletion } from './model-client.js';
 
-const DEFAULT_ENDPOINT = "https://api.deepseek.com/chat/completions";
-const DEFAULT_MODEL = "deepseek-flash";
-const MAX_REPORT_CHARS = 1200;
-
-export const COACH_SYSTEM_PROMPT =
-  "你是一位专业的中国象棋教练。请结合提供的 FEN 局面、上一手棋，以及引擎推荐的最优解，用通俗易懂的语言分析：为什么引擎推荐的这一步是最优的？上一手棋是失误还是好棋？接下来的战术意图是什么？用中文回答，分成三小段，每段两三句话，总共不超过 300 字。不要编造不存在的走法，不要输出 Markdown 标题、代码块或表情。";
-
-function cleanText(value, maxLength) {
-  if (typeof value !== "string") return "";
-  return value.trim().slice(0, maxLength);
+export function buildMessages(id, move, mode = 'customized', engine = null, history=[]) {
+  const puzzle = findPuzzle(id);
+  const lesson = getLesson(id, move, history);
+  const common = { fen: lesson.fen || puzzle.fen, task: lesson.task || puzzle.objective, candidateMove: lesson.move, notation: lesson.notation, evidence: lesson.evidence, exerciseCompleteAfterCandidate: lesson.complete ?? lesson.correct, engine };
+  const schema = '只返回 JSON：{"move":"给定候选着法","observation":"一句局面观察","reason":"最多150字解释","practice":"一句练习建议","evidenceIds":["E1"]}。不要编造其他着法、坐标或棋子；不能把引擎评分说成胜率；只讨论给定证据能支持的结论。engine 为 null 时不得声称使用了引擎分析或给出引擎评分。连续将杀的正确中间着法不等于已经绝杀；exerciseCompleteAfterCandidate 为 false 时不得声称已经通关或黑方无路可走。';
+  const system = mode === 'customized'
+    ? `你是面向象棋初学者的战术学习助手。先核对规则证据，再引用相关知识，解释指定训练目标。教案是参考，若选择了其他正确着法，必须解释实际候选着法而不能照抄教案。引用证据编号，区分将军、绝杀与困毙，承认多个正确应将。引擎的推荐着法可能与题目候选着法不同，不能将原局面的引擎评分移用于候选着法；引擎 mate 分值也不单独证明正在将军。${schema}`
+    : `你是中国象棋助手，请分析给定局面、候选着法和相同的规则/引擎信息。${schema}`;
+  const context = mode === 'customized' ? { ...common, knowledge: lesson.knowledge, teachingExample: puzzle.lesson, learningGoal: puzzle.reflection } : common;
+  return [{ role: 'system', content: system }, { role: 'user', content: JSON.stringify(context) }];
 }
 
-function sanitizeModel(value) {
-  const model = cleanText(value, 64) || DEFAULT_MODEL;
-  if (!/^[a-zA-Z0-9._:-]+$/.test(model)) {
-    const error = new Error("DeepSeek 模型名称格式不正确。");
-    error.statusCode = 400;
-    throw error;
+export function validateCoachResponse(raw, expectedMove, evidenceIds, allowedMoves = [expectedMove]) {
+  const clean = String(raw ?? '').trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+  const data = JSON.parse(clean);
+  if (data.move !== expectedMove) throw new Error('候选着法不一致');
+  for (const key of ['observation', 'reason', 'practice']) {
+    if (typeof data[key] !== 'string' || !data[key].trim() || data[key].length > 700) throw new Error('输出字段无效');
   }
-  return model;
+  if (!Array.isArray(data.evidenceIds) || !data.evidenceIds.length || data.evidenceIds.some(id => !evidenceIds.includes(id))) throw new Error('证据编号无效');
+  const text = `${data.observation} ${data.reason} ${data.practice}`;
+  for (const token of text.match(/[a-i][0-9][a-i][0-9]/g) || []) if (!allowedMoves.includes(token)) throw new Error('出现未提供的坐标着法');
+  return { move: data.move, observation: data.observation.trim(), reason: data.reason.trim(), practice: data.practice.trim(), evidenceIds: [...new Set(data.evidenceIds)] };
 }
 
-function requestThinkingOptions(model) {
-  // deepseek-flash is a hybrid/reasoning model. For short commentary and
-  // tactical summaries, reasoning tokens can consume the whole max_tokens
-  // budget and leave an empty content field. Disable thinking only for the
-  // model that supports this option; chat models reject unknown arguments.
-  return /^deepseek-flash(?:$|[-.])/i.test(model)
-    ? { thinking: { type: "disabled" } }
-    : {};
+export async function generateCoach(id, move, mode = 'customized', engine = null, fetchImpl = fetch, settings, history=[]) {
+  const config = resolveModelConfig(settings);
+  const lesson = getLesson(id, move, history);
+  const requestBody = buildCompletionBody(config, buildMessages(id, lesson.move, mode, engine, history));
+  const started = Date.now();
+  const payload = await requestCompletion(config, requestBody, fetchImpl);
+  const finishReason = payload.choices?.[0]?.finish_reason ?? null;
+  const usage = payload.usage ?? null;
+  if (finishReason === 'length') return { source: 'lesson-fallback', validation: 'truncated', message: '模型输出达到长度上限，已切换为完整教案。', lesson, elapsedMs: Date.now() - started, finishReason, usage };
+  let content;
+  const positionFen=lesson.fen || findPuzzle(id).fen;
+  const engineMoves = engine ? validatePV(positionFen, Array.isArray(engine.pv) ? engine.pv : []) : [];
+  const engineBest = engine?.bestMove ? validatePV(positionFen, [engine.bestMove]) : [];
+  // A response may contrast the lesson move with a DIFFERENT provided engine
+  // recommendation. Permit only those tool-supplied, legally verified moves;
+  // the structured answer must still equal the exercise candidate.
+  const allowedMoves = [...new Set([lesson.move, ...engineMoves, ...engineBest])];
+  try { content = validateCoachResponse(payload.choices?.[0]?.message?.content, lesson.move, lesson.evidence.map(item => item.id), allowedMoves); }
+  catch { return { source: 'lesson-fallback', validation: 'rejected', message: '模型结果未通过结构、坐标或引用校验，已切换为教案。', lesson, elapsedMs: Date.now() - started, finishReason, usage }; }
+  return { source: 'model', validation: 'schema-uci-and-citation-ids-checked', semanticReview: '已检查结构、UCI 着法与引用编号；自然语言的战术解释仍需结合证据审阅。', mode, model: config.model, ...content, evidence: lesson.evidence, knowledge: mode === 'customized' ? lesson.knowledge : [], usage, finishReason, elapsedMs: Date.now() - started };
 }
-
-function describeLastMove(lastMove) {
-  if (!lastMove) return "无（当前是开局或刚载入的局面）";
-  const side =
-    lastMove.side === "w" ? "红方" : lastMove.side === "b" ? "黑方" : "";
-  const notation = cleanText(lastMove.notation, 32);
-  const description = cleanText(lastMove.description, 80);
-  const parts = [side, notation, description].filter(Boolean);
-  return parts.length ? parts.join(" ") : "无";
-}
-
-export function formatCoachContext(context = {}) {
-  const engine = context.engine ?? {};
-  return [
-    `当前 FEN：${cleanText(context.fen, 160) || "未知"}`,
-    `行棋方：${context.turn === "b" ? "黑方" : "红方"}`,
-    `上一手棋：${describeLastMove(context.lastMove)}`,
-    `引擎推荐最优着法：${cleanText(engine.bestMove, 24) || "暂无"}${
-      engine.bestChinese ? `（${cleanText(engine.bestChinese, 32)}）` : ""
-    }`,
-    `引擎评分：${cleanText(engine.score, 24) || "暂无"}`,
-    `搜索深度：${cleanText(engine.depth, 24) || "暂无"}`,
-    `主要变化：${cleanText(engine.principalVariation, 400) || "暂无"}`,
-    `当前第几手：${Number(context.moveCount) || 0}`,
-    `局面状态：${cleanText(context.gameState, 40) || "进行中"}`,
-  ].join("\n");
-}
-
-export async function generateCoachAnalysis(
-  { apiKey, model, context } = {},
-  { endpoint = DEFAULT_ENDPOINT, fetchImpl = fetch, timeoutMs = 60000 } = {},
-) {
-  // 密钥会进入 Authorization 请求头，必须先拦下中文/全角字符，见 deepseek-key.js。
-  const key = normalizeApiKey(apiKey);
-
-  const selectedModel = sanitizeModel(model);
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-
-  try {
-    const response = await fetchImpl(endpoint, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${key}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: selectedModel,
-        messages: [
-          { role: "system", content: COACH_SYSTEM_PROMPT },
-          { role: "user", content: formatCoachContext(context) },
-        ],
-        temperature: 0.6,
-        max_tokens: 700,
-        stream: false,
-        ...requestThinkingOptions(selectedModel),
-      }),
-      signal: controller.signal,
-    });
-
-    const payload = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      const detail = cleanText(payload?.error?.message, 180);
-      const error = new Error(
-        response.status === 401
-          ? "DeepSeek API Key 无效或已过期。"
-          : detail || `DeepSeek 请求失败（${response.status}）。`,
-      );
-      error.statusCode =
-        response.status >= 400 && response.status < 500 ? response.status : 502;
-      throw error;
-    }
-
-    const text = cleanText(
-      payload?.choices?.[0]?.message?.content,
-      MAX_REPORT_CHARS,
-    );
-    if (!text) {
-      const error = new Error("DeepSeek 没有返回战术分析内容。");
-      error.statusCode = 502;
-      throw error;
-    }
-    return { text, model: selectedModel };
-  } catch (error) {
-    if (error?.name === "AbortError") {
-      const timeoutError = new Error("DeepSeek 战术分析超时，请稍后重试。");
-      timeoutError.statusCode = 504;
-      throw timeoutError;
-    }
-    throw error;
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
-export { DEFAULT_ENDPOINT, DEFAULT_MODEL, MAX_REPORT_CHARS };
